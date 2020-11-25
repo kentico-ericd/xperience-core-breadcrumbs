@@ -1,0 +1,4 @@
+*
+!.gitignore
+!Components/Widgets/BreadcrumbsWidget/*
+!/README.md
