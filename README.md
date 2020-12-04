@@ -42,7 +42,7 @@ The widget can be added to any page which uses the [page builder](https://docs.x
 
 ## Adding breadcrumbs to views
 
-You can also [add the widget directly to any view](https://docs.xperience.io/developing-websites/developing-xperience-applications-using-asp-net-core/page-builder-development-in-asp-net-core/rendering-widgets-directly-in-asp-net-core), such as the main **_Layout.cshtml**. The code varies depending on whether you used the optional [dependency injection](#registering-the-widget-via-dependency-injection) .
+You can also add the widget directly to any view, such as the main **_Layout.cshtml**. The code varies depending on whether you used the optional [dependency injection](#registering-the-widget-via-dependency-injection) .
 
 ### If you are using the DI approach
 
