@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<package >
+  <metadata>
+    <id>Xperience.Core.Breadcrumbs</id>
+    <version>1.0.0</version>
+    <title>Xperience.Core.Breadcrumbs</title>
+    <authors>Eric Dugre</authors>
+    <owners>$author$</owners>
+    <description>A breadcrumbs widget for Xperience .NET Core websites</description>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <copyright>Copyright 2020</copyright>
+    <tags></tags>
+  </metadata>
+</package>
