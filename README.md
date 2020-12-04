@@ -16,7 +16,7 @@ This is a widget for Xperience .NET Core websites which use [Content Tree-Based 
 
 You can configure a set of default widget properties using dependency injection. First, call `AddBreadcrumbs` in your [startup code](https://docs.xperience.io/developing-websites/developing-xperience-applications-using-asp-net-core/starting-with-asp-net-core-development#StartingwithASP.NETCoredevelopment-Configuringapplicationstartup) and provide the default properties:
 
-```
+```cs
 using Xperience.Core.Breadcrumbs;
 ...
 services.AddBreadcrumbs(new BreadcrumbsWidgetProperties()
@@ -48,7 +48,7 @@ You can also add the widget directly to any view, such as the main **_Layout.csh
 
 You can render the breadcrumbs with the default properties using:
 
-```
+```cs
 @using Xperience.Core.Breadcrumbs
 @inject BreadcrumbHelper breadcrumbHelper
 ...
@@ -57,7 +57,7 @@ You can render the breadcrumbs with the default properties using:
 
 To override the default properties, pass a new `BreadcrumbsWidgetProperties` instance:
 
-```
+```cs
 @using Xperience.Core.Breadcrumbs
 @inject BreadcrumbHelper breadcrumbHelper
 ...
@@ -74,7 +74,7 @@ To override the default properties, pass a new `BreadcrumbsWidgetProperties` ins
 
 The code is very similar to the DI approach, but since `BreadcrumbHelper` cannot be injected, you need to create a new instance:
 
-```
+```cs
 @using Xperience.Core.Breadcrumbs
 ...
 @Html.Raw(new BreadcrumbHelper().GetBreadcrumbs(new BreadcrumbsWidgetProperties()
