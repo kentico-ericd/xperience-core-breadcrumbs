@@ -1,3 +1,5 @@
+[![Nuget](https://img.shields.io/nuget/v/Xperience.Core.Breadcrumbs)](https://www.nuget.org/packages/Xperience.Core.Breadcrumbs)
+
 # Xperience 13 .NET Core Breadcrumb Widget
 
 This is a widget for Xperience .NET Core websites which use [Content Tree-Based routing](https://docs.xperience.io/developing-websites/implementing-routing/content-tree-based-routing).
