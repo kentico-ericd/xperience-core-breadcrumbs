@@ -29,6 +29,18 @@ namespace Xperience.Core.Breadcrumbs
         [EditingComponent(TextInputComponent.IDENTIFIER, Order = 4, Label = "Container class")]
         public string ContainerClass { get; set; }
 
+        /// <summary>
+        /// One or more CSS classes to be added to every breadcrumb item
+        /// </summary>
+        [EditingComponent(TextInputComponent.IDENTIFIER, Order = 5, Label = "Item class")]
+        public string BreadcrumbItemClass { get; set; }
+
+        /// <summary>
+        /// One or more CSS classes added only to the current page
+        /// </summary>
+        [EditingComponent(TextInputComponent.IDENTIFIER, Order = 5, Label = "Current page class")]
+        public string CurrentPageClass { get; set; }
+
         public BreadcrumbsWidgetProperties()
         {
 
@@ -40,6 +52,8 @@ namespace Xperience.Core.Breadcrumbs
             ContainerClass = "breadcrumbs-widget";
             ShowContainers = true;
             ShowSiteLink = true;
+            BreadcrumbItemClass = "breadcrumb-item";
+            CurrentPageClass = "breadcrumbs-current";
             return this;
         }
     }

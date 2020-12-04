@@ -30,6 +30,8 @@ services.AddBreadcrumbs(options => {
     options.ShowContainers = true;
     options.ShowSiteLink = true;
     options.ContainerClass = "breadcrumbs-widget";
+    options.BreadcrumbItemClass = "breadcrumb-item";
+    options.CurrentPageClass = "breadcrumbs-current";
 });
 ```
 
@@ -38,12 +40,14 @@ This registers `BreadcrumbHelper` and `BreadcrumbsWidgetProperties` with depende
 
 ## Adding the widget to a page
 
-The widget can be added to any page which uses the [page builder](https://docs.xperience.io/developing-websites/page-builder-development/creating-pages-with-editable-areas). It has 4 properties:
+The widget can be added to any page which uses the [page builder](https://docs.xperience.io/developing-websites/page-builder-development/creating-pages-with-editable-areas). It has 6 properties:
 
 - **Show domain link first**: Displays the site name and a link to the root of the site as the first breadcrumb item
 - **Show container page types**: If checked, pages that use container page types (e.g. a Folder) will appear in the breadcrumbs
 - **Separator**: The text to add between each breadcrumb item
 - **Container class**: The CSS class(es) to add the `div` that surrounds the breadcrumbs
+- **Item class**: The CSS class(es) added to all breadcrumb items
+- **Current page class**: The CSS class(es) add to the current page
 
 ## Adding breadcrumbs to views
 
@@ -68,7 +72,9 @@ To override the properties, pass a new `BreadcrumbsWidgetProperties` instance:
     Separator = "|",
     ShowContainers = true,
     ShowSiteLink = true,
-    ContainerClass = "my-breadcrumbs"
+    ContainerClass = "my-breadcrumbs",
+    BreadcrumbItemClass = "breadcrumb-item",
+    CurrentPageClass = "breadcrumbs-current"
 })
 ```
 
@@ -84,7 +90,9 @@ The code is very similar to the DI approach, but since `BreadcrumbHelper` cannot
     Separator = "|",
     ShowContainers = true,
     ShowSiteLink = true,
-    ContainerClass = "my-breadcrumbs"
+    ContainerClass = "my-breadcrumbs",
+    BreadcrumbItemClass = "breadcrumb-item",
+    CurrentPageClass = "breadcrumbs-current"
 }))
 ```
 
@@ -97,9 +105,6 @@ To register your custom renderer, add it to the `AddBreadcrumbs` call:
 ```cs
 services.AddBreadcrumbs(options => {
     options.Separator = "|";
-    options.ShowContainers = true;
-    options.ShowSiteLink = true;
-    options.ContainerClass = "breadcrumbs-widget";
 }, new MyCustomBreadcrumbRenderer());
 ```
 

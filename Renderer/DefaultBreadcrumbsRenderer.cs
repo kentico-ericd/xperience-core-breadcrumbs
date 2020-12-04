@@ -11,19 +11,19 @@ namespace Xperience.Core.Breadcrumbs
             return "</div>";
         }
 
-        public string RenderCurrentPage(BreadcrumbItem bci)
+        public string RenderCurrentPage(BreadcrumbItem bci, string breadcrumbItemClass, string currentPageClass)
         {
-            return $"<span class='breadcrumb-item breadcrumb-current-page'>{bci.Name}</span>";
+            return $"<span class='{breadcrumbItemClass} {currentPageClass}'>{bci.Name}</span>";
         }
 
-        public string RenderItem(BreadcrumbItem bci)
+        public string RenderItem(BreadcrumbItem bci, string breadcrumbItemClass)
         {
-            return $"<span class='breadcrumb-item'><a href='{bci.Url}'>{bci.Name}</a></span>";
+            return $"<span class='{breadcrumbItemClass}'><a href='{bci.Url}'>{bci.Name}</a></span>";
         }
 
-        public string RenderItemWithoutLink(BreadcrumbItem bci)
+        public string RenderItemWithoutLink(BreadcrumbItem bci, string breadcrumbItemClass)
         {
-            return $"<span class='breadcrumb-item'>{bci.Name}</span>";
+            return $"<span class='{breadcrumbItemClass}'>{bci.Name}</span>";
         }
 
         public string RenderOpeningTag(string containerClass)
@@ -36,9 +36,9 @@ namespace Xperience.Core.Breadcrumbs
             return $" {separator} ";
         }
 
-        public string RenderSiteLink(BreadcrumbItem bci)
+        public string RenderSiteLink(BreadcrumbItem bci, string breadcrumbItemClass)
         {
-            return RenderItem(bci);
+            return RenderItem(bci, breadcrumbItemClass);
         }
     }
 }

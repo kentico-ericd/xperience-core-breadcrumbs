@@ -82,19 +82,19 @@ namespace Xperience.Core.Breadcrumbs
                 sb.Append(breadcrumbsRenderer.RenderSeparator(props.Separator));
                 if (bci.IsCurrentPage)
                 {
-                    sb.Append(breadcrumbsRenderer.RenderCurrentPage(bci));
+                    sb.Append(breadcrumbsRenderer.RenderCurrentPage(bci, props.BreadcrumbItemClass, props.CurrentPageClass));
                 }
                 else if (bci.IsSiteLink)
                 {
-                    sb.Append(breadcrumbsRenderer.RenderSiteLink(bci));
+                    sb.Append(breadcrumbsRenderer.RenderSiteLink(bci, props.BreadcrumbItemClass));
                 }
                 else if (bci.Url == null)
                 {
-                    sb.Append(breadcrumbsRenderer.RenderItemWithoutLink(bci));
+                    sb.Append(breadcrumbsRenderer.RenderItemWithoutLink(bci, props.BreadcrumbItemClass));
                 }
                 else
                 {
-                    sb.Append(breadcrumbsRenderer.RenderItem(bci));
+                    sb.Append(breadcrumbsRenderer.RenderItem(bci, props.BreadcrumbItemClass));
                 }
             }
 
