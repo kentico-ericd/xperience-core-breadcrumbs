@@ -27,7 +27,7 @@ namespace Xperience.Core.Breadcrumbs
         /// One or more CSS classes to be added to the DIV which surrounds the breadcrumbs
         /// </summary>
         [EditingComponent(TextInputComponent.IDENTIFIER, Order = 4, Label = "Container class")]
-        public string ClassName { get; set; }
+        public string ContainerClass { get; set; }
 
         public BreadcrumbsWidgetProperties()
         {
@@ -37,7 +37,7 @@ namespace Xperience.Core.Breadcrumbs
         public BreadcrumbsWidgetProperties SetDefaults()
         {
             Separator = "|";
-            ClassName = "breadcrumbs-widget";
+            ContainerClass = "breadcrumbs-widget";
             ShowContainers = true;
             ShowSiteLink = true;
             return this;
