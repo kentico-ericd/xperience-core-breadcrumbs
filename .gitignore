@@ -1,4 +1,4 @@
 bin
 obj
-nuget.exe
 *.nupkg
+*.sln

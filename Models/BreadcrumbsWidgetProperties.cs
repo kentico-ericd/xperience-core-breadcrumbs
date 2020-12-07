@@ -38,12 +38,12 @@ namespace Xperience.Core.Breadcrumbs
         /// <summary>
         /// One or more CSS classes added only to the current page
         /// </summary>
-        [EditingComponent(TextInputComponent.IDENTIFIER, Order = 5, Label = "Current page class")]
+        [EditingComponent(TextInputComponent.IDENTIFIER, Order = 6, Label = "Current page class")]
         public string CurrentPageClass { get; set; }
 
         public BreadcrumbsWidgetProperties()
         {
-
+            
         }
 
         public BreadcrumbsWidgetProperties SetDefaults()

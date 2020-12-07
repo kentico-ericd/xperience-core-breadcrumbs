@@ -2,11 +2,16 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <Version>1.1.1</Version>
+    <Authors>Eric Dugre</Authors>
+    <Company>Kentico</Company>
+    <Description>A breadcrumbs widget for Xperience .NET Core websites</Description>
+    <Product>Xperience</Product>
   </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="Kentico.Xperience.AspNetCore.WebApp" Version="13.0.0" />
-    <PackageReference Include="Kentico.Xperience.Libraries" Version="13.0.0" />
     <PackageReference Include="Microsoft.AspNetCore.Html.Abstractions" Version="2.2.0" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.ViewFeatures" Version="2.2.0" />
   </ItemGroup>
