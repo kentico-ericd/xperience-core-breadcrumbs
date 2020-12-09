@@ -3,7 +3,7 @@
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <Version>1.1.2</Version>
+    <Version>1.1.3</Version>
     <Authors>Eric Dugre</Authors>
     <Company>Kentico</Company>
     <Description>A breadcrumbs widget for Xperience .NET Core websites</Description>
