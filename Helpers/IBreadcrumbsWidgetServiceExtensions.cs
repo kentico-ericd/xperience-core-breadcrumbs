@@ -7,7 +7,7 @@ namespace Xperience.Core.Breadcrumbs
 {
     public static class IBreadcrumbsWidgetServiceExtensions
     {
-        public static void AddBreadcrumbs(
+        public static IServiceCollection AddBreadcrumbs(
             this IServiceCollection services,
             Action<BreadcrumbsWidgetProperties> configure = null,
             IBreadcrumbsRenderer renderer = null)
@@ -28,6 +28,8 @@ namespace Xperience.Core.Breadcrumbs
                 configure(props);
             }
             services.AddSingleton(props);
+
+            return services;
         }
     }
 }
