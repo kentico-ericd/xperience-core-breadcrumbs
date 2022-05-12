@@ -1,13 +1,13 @@
-﻿using CMS.Core;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using CMS.Core;
 using CMS.DataEngine;
 using CMS.DocumentEngine;
 using CMS.Helpers;
 using Kentico.Content.Web.Mvc;
 using Microsoft.AspNetCore.Html;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
 namespace Xperience.Core.Breadcrumbs
 {
@@ -19,7 +19,7 @@ namespace Xperience.Core.Breadcrumbs
         private readonly IBreadcrumbsRenderer breadcrumbsRenderer;
         private readonly IPageRetriever pageRetriever;
 
-        public BreadcrumbsWidgetProperties Properties { get; set; }
+        public BreadcrumbsWidgetProperties? Properties { get; set; }
 
         public BreadcrumbHelper() : this(
             Service.Resolve<IPageDataContextRetriever>(),
@@ -49,7 +49,7 @@ namespace Xperience.Core.Breadcrumbs
             IPageUrlRetriever pageUrlRetriever,
             IBreadcrumbsRenderer breadcrumbsRenderer,
             IPageRetriever pageRetriever,
-            BreadcrumbsWidgetProperties breadcrumbsWidgetProperties)
+            BreadcrumbsWidgetProperties? breadcrumbsWidgetProperties)
         {
             this.pageDataContextRetriever = pageDataContextRetriever;
             this.pageUrlRetriever = pageUrlRetriever;
@@ -78,7 +78,28 @@ namespace Xperience.Core.Breadcrumbs
             return GetBreadcrumbContent(Properties);
         }
 
-        private IHtmlContent GetBreadcrumbContent(BreadcrumbsWidgetProperties props)
+        public IReadOnlyList<BreadcrumbItem> GetHierarchy(BreadcrumbsWidgetProperties? props)
+        {
+            props = props ?? Properties;
+
+            if (props is null)
+            {
+                throw new ArgumentNullException(nameof(props));
+            }
+
+            var current = pageDataContextRetriever.Retrieve<TreeNode>().Page;
+            var hierarchy = CacheHelper.Cache((cs) =>
+            {
+                ICollection<string> cacheDependencies = new List<string>();
+                var list = GetHierarchyInternal(current, props.ShowSiteLink, props.ShowContainers, ref cacheDependencies);
+                cs.CacheDependency = CacheHelper.GetCacheDependency(cacheDependencies);
+                return list;
+            }, new CacheSettings(120, GetCacheKey(current.DocumentID, props.ShowSiteLink, props.ShowContainers)));
+
+            return hierarchy.ToList().AsReadOnly();
+        }
+
+        private IHtmlContent GetBreadcrumbContent(BreadcrumbsWidgetProperties? props)
         {
             if (props is null)
             {
@@ -86,10 +107,11 @@ namespace Xperience.Core.Breadcrumbs
             }
 
             var current = pageDataContextRetriever.Retrieve<TreeNode>().Page;
-            var hierarchy = CacheHelper.Cache((cs) => {
+            var hierarchy = CacheHelper.Cache((cs) =>
+            {
 
                 ICollection<string> cacheDependencies = new List<string>();
-                var list = GetHierarchy(current, props.ShowSiteLink, props.ShowContainers, ref cacheDependencies);
+                var list = GetHierarchyInternal(current, props.ShowSiteLink, props.ShowContainers, ref cacheDependencies);
                 cs.CacheDependency = CacheHelper.GetCacheDependency(cacheDependencies);
                 return list;
             }, new CacheSettings(120, GetCacheKey(current.DocumentID, props.ShowSiteLink, props.ShowContainers)));
@@ -128,7 +150,7 @@ namespace Xperience.Core.Breadcrumbs
             return string.Format(CACHE_KEY_FORMAT, docID, showSiteLink, showContainers);
         }
 
-        private IEnumerable<BreadcrumbItem> GetHierarchy(TreeNode current, bool addSiteLink, bool showContainers, ref ICollection<string> cacheDependencies)
+        private IEnumerable<BreadcrumbItem> GetHierarchyInternal(TreeNode current, bool addSiteLink, bool showContainers, ref ICollection<string> cacheDependencies)
         {
             // Add current page
             var ret = new List<BreadcrumbItem>();
@@ -146,7 +168,7 @@ namespace Xperience.Core.Breadcrumbs
             );
 
             // Add current page's parents in loop
-            var nodeLevel = current.NodeLevel-1;
+            var nodeLevel = current.NodeLevel - 1;
             while (nodeLevel > 0)
             {
                 var parent = pages.Where(p => p.NodeLevel == nodeLevel).FirstOrDefault();
