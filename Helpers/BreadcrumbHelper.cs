@@ -80,7 +80,7 @@ namespace Xperience.Core.Breadcrumbs
 
         public IReadOnlyList<BreadcrumbItem> GetHierarchy(BreadcrumbsWidgetProperties? props)
         {
-            props = props ?? Properties;
+            props ??= Properties;
 
             if (props is null)
             {
@@ -153,13 +153,15 @@ namespace Xperience.Core.Breadcrumbs
         private IEnumerable<BreadcrumbItem> GetHierarchyInternal(TreeNode current, bool addSiteLink, bool showContainers, ref ICollection<string> cacheDependencies)
         {
             // Add current page
-            var ret = new List<BreadcrumbItem>();
-            ret.Add(new BreadcrumbItem()
+            var ret = new List<BreadcrumbItem>
             {
-                Name = current.DocumentName,
-                Url = null,
-                IsCurrentPage = true
-            });
+                new BreadcrumbItem()
+                {
+                    Name = current.DocumentName,
+                    Url = null,
+                    IsCurrentPage = true
+                }
+            };
             cacheDependencies.Add($"documentid|{current.DocumentID}");
 
             // Get all pages on current page path
@@ -214,7 +216,7 @@ namespace Xperience.Core.Breadcrumbs
             string result = target;
             while (result.StartsWith(trimString))
             {
-                result = result.Substring(trimString.Length);
+                result = result[trimString.Length..];
             }
 
             return result;
