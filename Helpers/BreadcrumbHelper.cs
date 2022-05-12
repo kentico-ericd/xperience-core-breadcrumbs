@@ -87,16 +87,7 @@ namespace Xperience.Core.Breadcrumbs
                 throw new ArgumentNullException(nameof(props));
             }
 
-            var current = pageDataContextRetriever.Retrieve<TreeNode>().Page;
-            var hierarchy = CacheHelper.Cache((cs) =>
-            {
-                ICollection<string> cacheDependencies = new List<string>();
-                var list = GetHierarchyInternal(current, props.ShowSiteLink, props.ShowContainers, ref cacheDependencies);
-                cs.CacheDependency = CacheHelper.GetCacheDependency(cacheDependencies);
-                return list;
-            }, new CacheSettings(120, GetCacheKey(current.DocumentID, props.ShowSiteLink, props.ShowContainers)));
-
-            return hierarchy.ToList().AsReadOnly();
+            return GetHierarchyInternal(props);
         }
 
         private IHtmlContent GetBreadcrumbContent(BreadcrumbsWidgetProperties? props)
@@ -106,15 +97,7 @@ namespace Xperience.Core.Breadcrumbs
                 throw new ArgumentNullException(nameof(props));
             }
 
-            var current = pageDataContextRetriever.Retrieve<TreeNode>().Page;
-            var hierarchy = CacheHelper.Cache((cs) =>
-            {
-
-                ICollection<string> cacheDependencies = new List<string>();
-                var list = GetHierarchyInternal(current, props.ShowSiteLink, props.ShowContainers, ref cacheDependencies);
-                cs.CacheDependency = CacheHelper.GetCacheDependency(cacheDependencies);
-                return list;
-            }, new CacheSettings(120, GetCacheKey(current.DocumentID, props.ShowSiteLink, props.ShowContainers)));
+            var hierarchy = GetHierarchyInternal(props);
 
             var header = breadcrumbsRenderer.RenderOpeningTag(props.ContainerClass);
             var footer = breadcrumbsRenderer.RenderClosingTag();
@@ -150,7 +133,27 @@ namespace Xperience.Core.Breadcrumbs
             return string.Format(CACHE_KEY_FORMAT, docID, showSiteLink, showContainers);
         }
 
-        private IEnumerable<BreadcrumbItem> GetHierarchyInternal(TreeNode current, bool addSiteLink, bool showContainers, ref ICollection<string> cacheDependencies)
+        private IReadOnlyList<BreadcrumbItem> GetHierarchyInternal(BreadcrumbsWidgetProperties props)
+        {
+            if (!pageDataContextRetriever.TryRetrieve<TreeNode>(out var data))
+            {
+                return new List<BreadcrumbItem>();
+            }
+
+            var current = data.Page;
+
+            var hierarchy = CacheHelper.Cache((cs) =>
+            {
+                ICollection<string> cacheDependencies = new List<string>();
+                var list = BuildHierarchyInternal(current, props.ShowSiteLink, props.ShowContainers, ref cacheDependencies);
+                cs.CacheDependency = CacheHelper.GetCacheDependency(cacheDependencies);
+                return list;
+            }, new CacheSettings(120, GetCacheKey(current.DocumentID, props.ShowSiteLink, props.ShowContainers)));
+
+            return hierarchy.ToList().AsReadOnly();
+        }
+
+        private IEnumerable<BreadcrumbItem> BuildHierarchyInternal(TreeNode current, bool addSiteLink, bool showContainers, ref ICollection<string> cacheDependencies)
         {
             // Add current page
             var ret = new List<BreadcrumbItem>
