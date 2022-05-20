@@ -43,7 +43,12 @@ namespace Xperience.Core.Breadcrumbs
 
         public BreadcrumbsWidgetProperties()
         {
-            
+            Separator = "|";
+            ContainerClass = "breadcrumbs-widget";
+            ShowContainers = true;
+            ShowSiteLink = true;
+            BreadcrumbItemClass = "breadcrumb-item";
+            CurrentPageClass = "breadcrumbs-current";
         }
 
         public BreadcrumbsWidgetProperties SetDefaults()

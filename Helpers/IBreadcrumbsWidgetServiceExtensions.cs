@@ -1,7 +1,5 @@
-﻿using DocumentFormat.OpenXml.Wordprocessing;
+﻿using System;
 using Microsoft.Extensions.DependencyInjection;
-using System;
-using System.CodeDom;
 
 namespace Xperience.Core.Breadcrumbs
 {
@@ -9,8 +7,8 @@ namespace Xperience.Core.Breadcrumbs
     {
         public static IServiceCollection AddBreadcrumbs(
             this IServiceCollection services,
-            Action<BreadcrumbsWidgetProperties> configure = null,
-            IBreadcrumbsRenderer renderer = null)
+            Action<BreadcrumbsWidgetProperties>? configure = null,
+            IBreadcrumbsRenderer? renderer = null)
         {
             services.AddSingleton<BreadcrumbHelper>();
 

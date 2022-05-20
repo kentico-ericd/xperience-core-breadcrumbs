@@ -13,9 +13,9 @@ namespace Xperience.Core.Breadcrumbs
     public class BreadcrumbsWidgetViewComponent : ViewComponent
     {
         public const string IDENTIFIER = "Xperience.Core.Breadcrumbs";
-        private readonly BreadcrumbHelper helper;
+        private readonly BreadcrumbHelper? helper;
 
-        public BreadcrumbsWidgetViewComponent(BreadcrumbHelper helper = null)
+        public BreadcrumbsWidgetViewComponent(BreadcrumbHelper? helper = null)
         {
             this.helper = helper;
         }
@@ -25,10 +25,10 @@ namespace Xperience.Core.Breadcrumbs
             IHtmlContent content;
             if (viewModel != null)
             {
-                if(viewModel.Properties.Separator is null)
+                if (viewModel.Properties.Separator is null)
                 {
                     // Adding new widget, try to get properties from DI
-                    if(helper is null)
+                    if (helper is null)
                     {
                         // DI not available and properties were not initialized with defaults, set them now
                         content = new BreadcrumbHelper().GetBreadcrumbs(new BreadcrumbsWidgetProperties().SetDefaults());
@@ -47,7 +47,7 @@ namespace Xperience.Core.Breadcrumbs
             }
             else
             {
-                if(helper != null)
+                if (helper != null)
                 {
                     // Breadcrumbs are being rendered in a view, get properties from DI
                     content = helper.GetBreadcrumbs();
