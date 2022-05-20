@@ -2,15 +2,21 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+
 using CMS.Core;
 using CMS.DataEngine;
 using CMS.DocumentEngine;
 using CMS.Helpers;
+
 using Kentico.Content.Web.Mvc;
+
 using Microsoft.AspNetCore.Html;
 
 namespace Xperience.Core.Breadcrumbs
 {
+    /// <summary>
+    /// Provides methods for retrieving breadcrumb content and HTML output.
+    /// </summary>
     public class BreadcrumbHelper
     {
         private const string CACHE_KEY_FORMAT = "breadcrumbswidget|document|{0}|{1}|{2}";
@@ -19,7 +25,13 @@ namespace Xperience.Core.Breadcrumbs
         private readonly IBreadcrumbsRenderer breadcrumbsRenderer;
         private readonly IPageRetriever pageRetriever;
 
-        public BreadcrumbsWidgetProperties? Properties { get; set; }
+
+        public BreadcrumbsWidgetProperties? Properties
+        {
+            get;
+            set;
+        }
+
 
         public BreadcrumbHelper() : this(
             Service.Resolve<IPageDataContextRetriever>(),
@@ -28,8 +40,8 @@ namespace Xperience.Core.Breadcrumbs
             Service.Resolve<IPageRetriever>(),
             null)
         {
-
         }
+
 
         public BreadcrumbHelper(
             IPageDataContextRetriever pageDataContextRetriever,
@@ -41,8 +53,8 @@ namespace Xperience.Core.Breadcrumbs
                 pageRetriever,
                 null)
         {
-
         }
+
 
         public BreadcrumbHelper(
             IPageDataContextRetriever pageDataContextRetriever,
@@ -58,26 +70,31 @@ namespace Xperience.Core.Breadcrumbs
             Properties = breadcrumbsWidgetProperties;
         }
 
+
         /// <summary>
-        /// Returns breadrumb HTML using the manually provided BreadcrumbsWidgetProperties
+        /// Gets breadrumb HTML using the manually provided <paramref name="props"/>.
         /// </summary>
-        /// <param name="props"></param>
-        /// <returns></returns>
+        /// <param name="props">The breadcrumb properties to use when retrieving and displaying the breadcrumbs.</param>
         public IHtmlContent GetBreadcrumbs(BreadcrumbsWidgetProperties props)
         {
             return GetBreadcrumbContent(props);
         }
 
+
         /// <summary>
-        /// Returns breadrumb HTML using the BreadcrumbsWidgetProperties registered via DI
+        /// Gets breadrumb HTML using the BreadcrumbsWidgetProperties registered via DI.
         /// </summary>
-        /// <param name="helper"></param>
-        /// <returns></returns>
         public IHtmlContent GetBreadcrumbs()
         {
             return GetBreadcrumbContent(Properties);
         }
 
+
+        /// <summary>
+        /// Gets a list of <see cref="BreadcrumbItem"/>s in the order they should be rendered.
+        /// </summary>
+        /// <param name="props">The breadcrumb properties to use when retrieving the hierarchy.</param>
+        /// <exception cref="ArgumentNullException"></exception>
         public IReadOnlyList<BreadcrumbItem> GetHierarchy(BreadcrumbsWidgetProperties? props)
         {
             props ??= Properties;
@@ -90,6 +107,7 @@ namespace Xperience.Core.Breadcrumbs
             return GetHierarchyInternal(props);
         }
 
+
         private IHtmlContent GetBreadcrumbContent(BreadcrumbsWidgetProperties? props)
         {
             if (props is null)
@@ -98,7 +116,6 @@ namespace Xperience.Core.Breadcrumbs
             }
 
             var hierarchy = GetHierarchyInternal(props);
-
             var header = breadcrumbsRenderer.RenderOpeningTag(props.ContainerClass);
             var footer = breadcrumbsRenderer.RenderClosingTag();
             var sb = new StringBuilder();
@@ -128,10 +145,12 @@ namespace Xperience.Core.Breadcrumbs
             return new HtmlString($"{header}{body}{footer}");
         }
 
+
         private string GetCacheKey(int docID, bool showSiteLink, bool showContainers)
         {
             return string.Format(CACHE_KEY_FORMAT, docID, showSiteLink, showContainers);
         }
+
 
         private IReadOnlyList<BreadcrumbItem> GetHierarchyInternal(BreadcrumbsWidgetProperties props)
         {
@@ -153,12 +172,13 @@ namespace Xperience.Core.Breadcrumbs
             return hierarchy.ToList().AsReadOnly();
         }
 
+
         private IEnumerable<BreadcrumbItem> BuildHierarchyInternal(TreeNode current, bool addSiteLink, bool showContainers, ref ICollection<string> cacheDependencies)
         {
             // Add current page
             var ret = new List<BreadcrumbItem>
             {
-                new BreadcrumbItem()
+                new BreadcrumbItem
                 {
                     Name = current.DocumentName,
                     Url = null,
@@ -184,7 +204,7 @@ namespace Xperience.Core.Breadcrumbs
                         !type.ClassIsCoupledClass && showContainers)
                     {
                         var url = pageUrlRetriever.Retrieve(parent).AbsoluteUrl;
-                        ret.Add(new BreadcrumbItem()
+                        ret.Add(new BreadcrumbItem
                         {
                             Name = parent.DocumentName,
                             Url = url
@@ -199,7 +219,7 @@ namespace Xperience.Core.Breadcrumbs
             // Add link to main domain if needed
             if (addSiteLink)
             {
-                ret.Add(new BreadcrumbItem()
+                ret.Add(new BreadcrumbItem
                 {
                     IsSiteLink = true,
                     Name = current.Site.DisplayName,
@@ -211,6 +231,7 @@ namespace Xperience.Core.Breadcrumbs
             ret.Reverse();
             return ret;
         }
+
 
         private string TrimSeparator(string target, string trimString)
         {

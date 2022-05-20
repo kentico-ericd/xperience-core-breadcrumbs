@@ -1,8 +1,11 @@
 ﻿using CMS;
+
 using Kentico.PageBuilder.Web.Mvc;
+
 using Microsoft.AspNetCore.Html;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ViewComponents;
+
 using Xperience.Core.Breadcrumbs;
 
 [assembly: AssemblyDiscoverable]
@@ -10,15 +13,25 @@ using Xperience.Core.Breadcrumbs;
 
 namespace Xperience.Core.Breadcrumbs
 {
+    /// <summary>
+    /// An Xperience pagebuilder widget which renders breadcrumbs.
+    /// </summary>
     public class BreadcrumbsWidgetViewComponent : ViewComponent
     {
+        /// <summary>
+        /// The unique identifier of the widget.
+        /// </summary>
         public const string IDENTIFIER = "Xperience.Core.Breadcrumbs";
+
+
         private readonly BreadcrumbHelper? helper;
+
 
         public BreadcrumbsWidgetViewComponent(BreadcrumbHelper? helper = null)
         {
             this.helper = helper;
         }
+
 
         public HtmlContentViewComponentResult Invoke(ComponentViewModel<BreadcrumbsWidgetProperties> viewModel)
         {

@@ -1,15 +1,47 @@
 ﻿namespace Xperience.Core.Breadcrumbs
 {
+    /// <summary>
+    /// Represents a single breadcrumb item to be rendered.
+    /// </summary>
     public class BreadcrumbItem
     {
-        public string Name { get; set; }
-        public string? Url { get; set; }
-        public bool IsCurrentPage { get; set; } = false;
-        public bool IsSiteLink { get; set; } = false;
-
-        public BreadcrumbItem()
+        /// <summary>
+        /// The text to be displayed for the breadcrumb.
+        /// </summary>
+        public string? Name
         {
-            Name = "";
+            get;
+            set;
         }
+
+
+        /// <summary>
+        /// The absolute URL of the breadcrumb.
+        /// </summary>
+        public string? Url
+        {
+            get;
+            set;
+        }
+
+
+        /// <summary>
+        /// <c>True</c> if this breadcrumb item represents the current page.
+        /// </summary>
+        public bool IsCurrentPage
+        {
+            get;
+            set;
+        } = false;
+
+
+        /// <summary>
+        /// <c>True</c> if this breadcrumb item displays the current site name and URL.
+        /// </summary>
+        public bool IsSiteLink
+        {
+            get;
+            set;
+        } = false;
     }
 }

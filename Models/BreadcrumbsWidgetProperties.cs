@@ -3,44 +3,80 @@ using Kentico.PageBuilder.Web.Mvc;
 
 namespace Xperience.Core.Breadcrumbs
 {
+    /// <summary>
+    /// Xperience pagebuilder widget properties for the breadcrumb widget.
+    /// </summary>
     public class BreadcrumbsWidgetProperties : IWidgetProperties
     {
         /// <summary>
-        /// HTML to be inserted between breadcrumb items
+        /// HTML to be inserted between breadcrumb items.
         /// </summary>
         [EditingComponent(TextInputComponent.IDENTIFIER, Order = 3, Label = "Separator")]
-        public string Separator { get; set; }
+        public string Separator
+        {
+            get;
+            set;
+        }
+
 
         /// <summary>
-        /// If true, a link to the current site will be displayed as the first item in the breadcrumbs
+        /// If <c>true</c>, a link to the current site will be displayed as the first item in the breadcrumbs.
         /// </summary>
         [EditingComponent(CheckBoxComponent.IDENTIFIER, Order = 1, Label = "Show domain link first")]
-        public bool ShowSiteLink { get; set; }
+        public bool ShowSiteLink
+        {
+            get;
+            set;
+        }
+
 
         /// <summary>
-        /// If true, pages which use a container page type (e.g. folders) will be displayed in the breadcrumbs
+        /// If true, pages which use a container page type (e.g. folders) will be displayed in the breadcrumbs.
         /// </summary>
         [EditingComponent(CheckBoxComponent.IDENTIFIER, Order = 2, Label = "Show container page types")]
-        public bool ShowContainers { get; set; }
+        public bool ShowContainers
+        {
+            get;
+            set;
+        }
+
 
         /// <summary>
-        /// One or more CSS classes to be added to the DIV which surrounds the breadcrumbs
+        /// One or more CSS classes to be added to the DIV which surrounds the breadcrumbs.
         /// </summary>
         [EditingComponent(TextInputComponent.IDENTIFIER, Order = 4, Label = "Container class")]
-        public string ContainerClass { get; set; }
+        public string ContainerClass
+        {
+            get;
+            set;
+        }
+
 
         /// <summary>
-        /// One or more CSS classes to be added to every breadcrumb item
+        /// One or more CSS classes to be added to every breadcrumb item.
         /// </summary>
         [EditingComponent(TextInputComponent.IDENTIFIER, Order = 5, Label = "Item class")]
-        public string BreadcrumbItemClass { get; set; }
+        public string BreadcrumbItemClass
+        {
+            get;
+            set;
+        }
+
 
         /// <summary>
-        /// One or more CSS classes added only to the current page
+        /// One or more CSS classes added only to the current page.
         /// </summary>
         [EditingComponent(TextInputComponent.IDENTIFIER, Order = 6, Label = "Current page class")]
-        public string CurrentPageClass { get; set; }
+        public string CurrentPageClass
+        {
+            get;
+            set;
+        }
 
+
+        /// <summary>
+        /// Initalizes a new instance of <see cref="BreadcrumbsWidgetProperties"/> with default values.
+        /// </summary>
         public BreadcrumbsWidgetProperties()
         {
             Separator = "|";
@@ -51,6 +87,10 @@ namespace Xperience.Core.Breadcrumbs
             CurrentPageClass = "breadcrumbs-current";
         }
 
+
+        /// <summary>
+        /// Sets the default values of the widget properties.
+        /// </summary>
         public BreadcrumbsWidgetProperties SetDefaults()
         {
             Separator = "|";

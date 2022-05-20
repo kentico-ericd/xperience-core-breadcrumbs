@@ -1,40 +1,49 @@
 ﻿namespace Xperience.Core.Breadcrumbs
 {
+    /// <summary>
+    /// Provides the HTML output of the breadcrumbs.
+    /// </summary>
     public interface IBreadcrumbsRenderer
     {
         /// <summary>
-        /// Renders the opening tag which surrounds the entire breadcrumb output
+        /// Renders the opening tag which surrounds the entire breadcrumb output.
         /// </summary>
-        public abstract string RenderOpeningTag(string containerClass);
+        public string RenderOpeningTag(string containerClass);
+
 
         /// <summary>
-        /// Renders the closing tag which surrounds the entire breadcrumb output
+        /// Renders the closing tag which surrounds the entire breadcrumb output.
         /// </summary>
-        public abstract string RenderClosingTag();
+        public string RenderClosingTag();
+
 
         /// <summary>
-        /// Renders the breadcrumb item of the current page
+        /// Renders the breadcrumb item of the current page.
         /// </summary>
-        public abstract string RenderCurrentPage(BreadcrumbItem bci, string breadcrumbItemClass, string currentPageClass);
+        public string RenderCurrentPage(BreadcrumbItem bci, string breadcrumbItemClass, string currentPageClass);
+
 
         /// <summary>
-        /// Renders the breadcrumb separator
+        /// Renders the breadcrumb separator.
         /// </summary>
-        public abstract string RenderSeparator(string separator);
+        public string RenderSeparator(string separator);
+
 
         /// <summary>
-        /// Renders the current site with a link to main domain
+        /// Renders the current site with a link to main domain.
         /// </summary>
-        public abstract string RenderSiteLink(BreadcrumbItem bci, string breadcrumbItemClass);
+        public string RenderSiteLink(BreadcrumbItem bci, string breadcrumbItemClass);
+
 
         /// <summary>
-        /// Renders a standard breadcrumb item which contains a link
+        /// Renders a standard breadcrumb item which contains a link.
         /// </summary>
-        public abstract string RenderItem(BreadcrumbItem bci, string breadcrumbItemClass);
+        public string RenderItem(BreadcrumbItem bci, string breadcrumbItemClass);
+
 
         /// <summary>
-        /// Renders a breadcrumb item that doesn't contain a link
+        /// Renders a breadcrumb item that doesn't contain a link.
         /// </summary>
-        public abstract string RenderItemWithoutLink(BreadcrumbItem bci, string breadcrumbItemClass);
+        public string RenderItemWithoutLink(BreadcrumbItem bci, string breadcrumbItemClass);
     }
 }
