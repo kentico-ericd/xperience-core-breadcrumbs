@@ -86,20 +86,5 @@ namespace Xperience.Core.Breadcrumbs
             BreadcrumbItemClass = "breadcrumb-item";
             CurrentPageClass = "breadcrumbs-current";
         }
-
-
-        /// <summary>
-        /// Sets the default values of the widget properties.
-        /// </summary>
-        public BreadcrumbsWidgetProperties SetDefaults()
-        {
-            Separator = "|";
-            ContainerClass = "breadcrumbs-widget";
-            ShowContainers = true;
-            ShowSiteLink = true;
-            BreadcrumbItemClass = "breadcrumb-item";
-            CurrentPageClass = "breadcrumbs-current";
-            return this;
-        }
     }
 }

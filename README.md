@@ -9,38 +9,31 @@ This is a widget for Xperience .NET Core websites which use [Content Tree-Based 
 ## Installation
 
 1. Install the [Xperience.Core.Breadcrumbs](https://www.nuget.org/packages/Xperience.Core.Breadcrumbs) NuGet package in your .NET Core application
-1. Register the breadcrumbs with [dependency injection](#registering-the-widget-via-dependency-injection) (optional)
-1. Build and [deploy](https://docs.xperience.io/developing-websites/developing-xperience-applications-using-asp-net-core/deploying-and-hosting-asp-net-core-applications) the website.
-
-## Registering the widget via dependency injection
-
-You can configure a set of default widget properties using dependency injection. First, call `AddBreadcrumbs` in your [startup code](https://docs.xperience.io/developing-websites/developing-xperience-applications-using-asp-net-core/starting-with-asp-net-core-development#StartingwithASP.NETCoredevelopment-Configuringapplicationstartup):
+2. Register the breadcrumbs in your application startup:
 
 ```cs
 using Xperience.Core.Breadcrumbs;
-...
-services.AddBreadcrumbs();
+
+public void ConfigureServices(IServiceCollection services) {
+    // Use default properties for all breadcrumbs
+    services.AddBreadcrumbs();
+
+    // Or, use these properties for all breadcrumbs
+    services.AddBreadcrumbs(options => {
+        options.Separator = "|";
+        options.ShowContainers = true;
+        options.ShowSiteLink = true;
+        options.ContainerClass = "breadcrumbs-widget";
+        options.BreadcrumbItemClass = "breadcrumb-item";
+        options.CurrentPageClass = "breadcrumbs-current";
+    });
 ```
 
-The properties will be initialized with the default values (shown below). To override them, you can specify one or more of the properties:
+## Using the breadcrumbs
 
-```cs
-services.AddBreadcrumbs(options => {
-    options.Separator = "|";
-    options.ShowContainers = true;
-    options.ShowSiteLink = true;
-    options.ContainerClass = "breadcrumbs-widget";
-    options.BreadcrumbItemClass = "breadcrumb-item";
-    options.CurrentPageClass = "breadcrumbs-current";
-});
-```
+### Adding the pagebuilder widget
 
-This registers `BreadcrumbHelper` and `BreadcrumbsWidgetProperties` with dependency injection, so these will be available in your views and code files. All new breadcrumb widgets added in the interface or rendered directly to views will use these properties, unless overridden.
-
-
-## Adding the widget to a page
-
-The widget can be added to any page which uses the [page builder](https://docs.xperience.io/developing-websites/page-builder-development/creating-pages-with-editable-areas). It has 6 properties:
+The breadcrumbs widget can be added to any page which uses the [page builder](https://docs.xperience.io/developing-websites/page-builder-development/creating-pages-with-editable-areas). It has 6 properties:
 
 - **Show domain link first**: Displays the site name and a link to the root of the site as the first breadcrumb item
 - **Show container page types**: If checked, pages that use container page types (e.g. a Folder) will appear in the breadcrumbs
@@ -49,13 +42,9 @@ The widget can be added to any page which uses the [page builder](https://docs.x
 - **Item class**: The CSS class(es) added to all breadcrumb items
 - **Current page class**: The CSS class(es) add to the current page
 
-## Adding breadcrumbs to views
+### Adding breadcrumbs to views
 
-You can also add the widget directly to any view, such as the main **_Layout.cshtml**. The code varies depending on whether you used the optional [dependency injection](#registering-the-widget-via-dependency-injection).
-
-### If you are using the DI approach
-
-You can render the breadcrumbs with the properties specified during registration using:
+You can also add the widget directly to any view, such as the main _Layout.cshtml_:
 
 ```cs
 @using Xperience.Core.Breadcrumbs
@@ -64,7 +53,7 @@ You can render the breadcrumbs with the properties specified during registration
 @breadcrumbHelper.GetBreadcrumbs()
 ```
 
-To override the properties, pass a new `BreadcrumbsWidgetProperties` instance:
+To override the properties registered during application startup, pass a new `BreadcrumbsWidgetProperties` instance:
 
 ```cs
 @breadcrumbHelper.GetBreadcrumbs(new BreadcrumbsWidgetProperties()
@@ -78,34 +67,17 @@ To override the properties, pass a new `BreadcrumbsWidgetProperties` instance:
 })
 ```
 
-### If you aren't using DI
-
-The code is very similar to the DI approach, but since `BreadcrumbHelper` cannot be injected, you need to create a new instance:
-
-```cs
-@using Xperience.Core.Breadcrumbs
-...
-@Html.Raw(new BreadcrumbHelper().GetBreadcrumbs(new BreadcrumbsWidgetProperties()
-{
-    Separator = "|",
-    ShowContainers = true,
-    ShowSiteLink = true,
-    ContainerClass = "my-breadcrumbs",
-    BreadcrumbItemClass = "breadcrumb-item",
-    CurrentPageClass = "breadcrumbs-current"
-}))
-```
-
 ## Custom rendering
 
-If you are using the [dependency injection](#registering-the-widget-via-dependency-injection) approach, you can create your own `IBreadcrumbsRenderer` to customize the HTML output of the widget. See [DefaultBreadcrumbsRenderer](/Renderer/DefaultBreadcrumbsRenderer.cs) for an example.
-
-To register your custom renderer, add it to the `AddBreadcrumbs` call:
+The final HTML of your breadcrumbs is determined by the `IBreadcrumbsRenderer` interface, which you can find the default code for in [DefaultBreadcrumbsRenderer](/Renderer/DefaultBreadcrumbsRenderer.cs). If you'd like to customize the HTML of the breadcrumbs, you can implement your own `IBreadcrumbsRenderer` and use the `RegisterImplementation` attribute to register your code with a higher priority:
 
 ```cs
-services.AddBreadcrumbs(options => {
-    options.Separator = "|";
-}, new MyCustomBreadcrumbRenderer());
+[assembly: RegisterImplementation(typeof(IBreadcrumbsRenderer), typeof(CustomBreadcrumbsRenderer), Lifestyle = Lifestyle.Singleton, Priority = RegistrationPriority.Default)]
+namespace MySite.Breadcrumbs {
+    /// <summary>
+    /// Custom implementation of <see cref="IBreadcrumbsRenderer"/>.
+    /// </summary>
+    public class CustomBreadcrumbsRenderer : IBreadcrumbsRenderer {
 ```
 
 ## Compatibility

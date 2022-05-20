@@ -10,28 +10,18 @@ namespace Xperience.Core.Breadcrumbs
     public static class IBreadcrumbsWidgetServiceExtensions
     {
         /// <summary>
-        /// Registers <see cref="BreadcrumbHelper"/>, <see cref="IBreadcrumbsRenderer"/>, and <see cref="BreadcrumbsWidgetProperties"/>
-        /// in the service collection.
+        /// Registers <see cref="BreadcrumbHelper"/> and <see cref="BreadcrumbsWidgetProperties"/> in the service collection.
         /// </summary>
         /// <param name="services">The service collection.</param>
         /// <param name="configure">Breadcrumb properties which override the default values.</param>
-        /// <param name="renderer">An optional <see cref="IBreadcrumbsRenderer"/> implementation.</param>
         public static IServiceCollection AddBreadcrumbs(
             this IServiceCollection services,
-            Action<BreadcrumbsWidgetProperties>? configure = null,
-            IBreadcrumbsRenderer? renderer = null)
+            Action<BreadcrumbsWidgetProperties>? configure = null)
         {
             services.AddSingleton<BreadcrumbHelper>();
 
-            // Register renderer
-            if (renderer is null)
-            {
-                renderer = new DefaultBreadcrumbsRenderer();
-            }
-            services.AddSingleton(renderer);
-
             // Register widget properties
-            var props = new BreadcrumbsWidgetProperties().SetDefaults();
+            var props = new BreadcrumbsWidgetProperties();
             if (configure is object)
             {
                 configure(props);

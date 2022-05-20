@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-using CMS.Core;
 using CMS.DataEngine;
 using CMS.DocumentEngine;
 using CMS.Helpers;
@@ -24,36 +23,7 @@ namespace Xperience.Core.Breadcrumbs
         private readonly IPageUrlRetriever pageUrlRetriever;
         private readonly IBreadcrumbsRenderer breadcrumbsRenderer;
         private readonly IPageRetriever pageRetriever;
-
-
-        public BreadcrumbsWidgetProperties? Properties
-        {
-            get;
-            set;
-        }
-
-
-        public BreadcrumbHelper() : this(
-            Service.Resolve<IPageDataContextRetriever>(),
-            Service.Resolve<IPageUrlRetriever>(),
-            new DefaultBreadcrumbsRenderer(),
-            Service.Resolve<IPageRetriever>(),
-            null)
-        {
-        }
-
-
-        public BreadcrumbHelper(
-            IPageDataContextRetriever pageDataContextRetriever,
-            IPageUrlRetriever pageUrlRetriever,
-            IPageRetriever pageRetriever) : this(
-                pageDataContextRetriever,
-                pageUrlRetriever,
-                new DefaultBreadcrumbsRenderer(),
-                pageRetriever,
-                null)
-        {
-        }
+        private readonly BreadcrumbsWidgetProperties breadcrumbsWidgetProperties;
 
 
         public BreadcrumbHelper(
@@ -61,13 +31,13 @@ namespace Xperience.Core.Breadcrumbs
             IPageUrlRetriever pageUrlRetriever,
             IBreadcrumbsRenderer breadcrumbsRenderer,
             IPageRetriever pageRetriever,
-            BreadcrumbsWidgetProperties? breadcrumbsWidgetProperties)
+            BreadcrumbsWidgetProperties breadcrumbsWidgetProperties)
         {
             this.pageDataContextRetriever = pageDataContextRetriever;
             this.pageUrlRetriever = pageUrlRetriever;
             this.breadcrumbsRenderer = breadcrumbsRenderer;
             this.pageRetriever = pageRetriever;
-            Properties = breadcrumbsWidgetProperties;
+            this.breadcrumbsWidgetProperties = breadcrumbsWidgetProperties;
         }
 
 
@@ -82,11 +52,11 @@ namespace Xperience.Core.Breadcrumbs
 
 
         /// <summary>
-        /// Gets breadrumb HTML using the BreadcrumbsWidgetProperties registered via DI.
+        /// Gets breadrumb HTML using the <see cref="BreadcrumbsWidgetProperties"/> registered via DI.
         /// </summary>
         public IHtmlContent GetBreadcrumbs()
         {
-            return GetBreadcrumbContent(Properties);
+            return GetBreadcrumbContent(breadcrumbsWidgetProperties);
         }
 
 
@@ -95,11 +65,9 @@ namespace Xperience.Core.Breadcrumbs
         /// </summary>
         /// <param name="props">The breadcrumb properties to use when retrieving the hierarchy.</param>
         /// <exception cref="ArgumentNullException"></exception>
-        public IReadOnlyList<BreadcrumbItem> GetHierarchy(BreadcrumbsWidgetProperties? props)
+        public IReadOnlyList<BreadcrumbItem> GetHierarchy(BreadcrumbsWidgetProperties props)
         {
-            props ??= Properties;
-
-            if (props is null)
+            if (props == null)
             {
                 throw new ArgumentNullException(nameof(props));
             }
@@ -110,7 +78,7 @@ namespace Xperience.Core.Breadcrumbs
 
         private IHtmlContent GetBreadcrumbContent(BreadcrumbsWidgetProperties? props)
         {
-            if (props is null)
+            if (props == null)
             {
                 throw new ArgumentNullException(nameof(props));
             }
@@ -160,7 +128,6 @@ namespace Xperience.Core.Breadcrumbs
             }
 
             var current = data.Page;
-
             var hierarchy = CacheHelper.Cache((cs) =>
             {
                 ICollection<string> cacheDependencies = new List<string>();

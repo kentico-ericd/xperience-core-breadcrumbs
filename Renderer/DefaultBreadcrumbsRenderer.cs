@@ -1,4 +1,10 @@
-﻿namespace Xperience.Core.Breadcrumbs
+﻿using CMS;
+using CMS.Core;
+
+using Xperience.Core.Breadcrumbs;
+
+[assembly: RegisterImplementation(typeof(IBreadcrumbsRenderer), typeof(DefaultBreadcrumbsRenderer), Lifestyle = Lifestyle.Singleton, Priority = RegistrationPriority.SystemDefault)]
+namespace Xperience.Core.Breadcrumbs
 {
     /// <summary>
     /// Default implementation of <see cref="IBreadcrumbsRenderer"/>.
