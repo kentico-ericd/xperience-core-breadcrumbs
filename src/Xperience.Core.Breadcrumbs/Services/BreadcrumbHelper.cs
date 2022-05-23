@@ -166,8 +166,8 @@ namespace Xperience.Core.Breadcrumbs
                 var type = DataClassInfoProvider.GetDataClassInfo(parent.ClassName);
                 if (type != null)
                 {
-                    if (type.ClassIsCoupledClass ||
-                        !type.ClassIsCoupledClass && props.ShowContainers)
+                    if (type.ClassHasURL ||
+                        (!type.ClassIsCoupledClass && props.ShowContainers))
                     {
                         ret.Add(breadcrumbItemMapper.MapPage(parent));
                     }
