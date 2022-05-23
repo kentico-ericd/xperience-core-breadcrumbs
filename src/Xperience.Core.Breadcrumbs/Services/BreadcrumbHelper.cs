@@ -20,23 +20,23 @@ namespace Xperience.Core.Breadcrumbs
     {
         private const string CACHE_KEY_FORMAT = "breadcrumbswidget|document|{0}|{1}|{2}";
         private readonly IPageDataContextRetriever pageDataContextRetriever;
-        private readonly IPageUrlRetriever pageUrlRetriever;
         private readonly IBreadcrumbsRenderer breadcrumbsRenderer;
+        private readonly IBreadcrumbItemMapper breadcrumbItemMapper;
         private readonly IPageRetriever pageRetriever;
         private readonly BreadcrumbsWidgetProperties breadcrumbsWidgetProperties;
 
 
         public BreadcrumbHelper(
             IPageDataContextRetriever pageDataContextRetriever,
-            IPageUrlRetriever pageUrlRetriever,
             IBreadcrumbsRenderer breadcrumbsRenderer,
             IPageRetriever pageRetriever,
+            IBreadcrumbItemMapper breadcrumbItemMapper,
             BreadcrumbsWidgetProperties breadcrumbsWidgetProperties)
         {
             this.pageDataContextRetriever = pageDataContextRetriever;
-            this.pageUrlRetriever = pageUrlRetriever;
             this.breadcrumbsRenderer = breadcrumbsRenderer;
             this.pageRetriever = pageRetriever;
+            this.breadcrumbItemMapper = breadcrumbItemMapper;
             this.breadcrumbsWidgetProperties = breadcrumbsWidgetProperties;
         }
 
@@ -76,7 +76,7 @@ namespace Xperience.Core.Breadcrumbs
         }
 
 
-        private IHtmlContent GetBreadcrumbContent(BreadcrumbsWidgetProperties? props)
+        private IHtmlContent GetBreadcrumbContent(BreadcrumbsWidgetProperties props)
         {
             if (props == null)
             {
@@ -98,7 +98,7 @@ namespace Xperience.Core.Breadcrumbs
                 {
                     sb.Append(breadcrumbsRenderer.RenderSiteLink(bci, props.BreadcrumbItemClass));
                 }
-                else if (string.IsNullOrEmpty(bci.Url))
+                else if (String.IsNullOrEmpty(bci.Url))
                 {
                     sb.Append(breadcrumbsRenderer.RenderItemWithoutLink(bci, props.BreadcrumbItemClass));
                 }
@@ -114,9 +114,13 @@ namespace Xperience.Core.Breadcrumbs
         }
 
 
-        private string GetCacheKey(int docID, bool showSiteLink, bool showContainers)
+        private string GetCacheKey(int docID, BreadcrumbsWidgetProperties props)
         {
-            return string.Format(CACHE_KEY_FORMAT, docID, showSiteLink, showContainers);
+            return string.Format(
+                CACHE_KEY_FORMAT,
+                docID,
+                props.ShowSiteLink,
+                props.ShowContainers);
         }
 
 
@@ -131,26 +135,21 @@ namespace Xperience.Core.Breadcrumbs
             var hierarchy = CacheHelper.Cache((cs) =>
             {
                 ICollection<string> cacheDependencies = new List<string>();
-                var list = BuildHierarchyInternal(current, props.ShowSiteLink, props.ShowContainers, ref cacheDependencies);
+                var list = BuildHierarchyInternal(current, props, ref cacheDependencies);
                 cs.CacheDependency = CacheHelper.GetCacheDependency(cacheDependencies);
                 return list;
-            }, new CacheSettings(120, GetCacheKey(current.DocumentID, props.ShowSiteLink, props.ShowContainers)));
+            }, new CacheSettings(120, GetCacheKey(current.DocumentID, props)));
 
             return hierarchy.ToList().AsReadOnly();
         }
 
 
-        private IEnumerable<BreadcrumbItem> BuildHierarchyInternal(TreeNode current, bool addSiteLink, bool showContainers, ref ICollection<string> cacheDependencies)
+        private IEnumerable<BreadcrumbItem> BuildHierarchyInternal(TreeNode current, BreadcrumbsWidgetProperties props, ref ICollection<string> cacheDependencies)
         {
             // Add current page
             var ret = new List<BreadcrumbItem>
             {
-                new BreadcrumbItem
-                {
-                    Name = current.DocumentName,
-                    Url = null,
-                    IsCurrentPage = true
-                }
+                breadcrumbItemMapper.MapPage(current, true)
             };
             cacheDependencies.Add($"documentid|{current.DocumentID}");
 
@@ -168,14 +167,9 @@ namespace Xperience.Core.Breadcrumbs
                 if (type != null)
                 {
                     if (type.ClassIsCoupledClass ||
-                        !type.ClassIsCoupledClass && showContainers)
+                        !type.ClassIsCoupledClass && props.ShowContainers)
                     {
-                        var url = pageUrlRetriever.Retrieve(parent).AbsoluteUrl;
-                        ret.Add(new BreadcrumbItem
-                        {
-                            Name = parent.DocumentName,
-                            Url = url
-                        });
+                        ret.Add(breadcrumbItemMapper.MapPage(parent));
                     }
                 }
                 cacheDependencies.Add($"documentid|{current.DocumentID}");
@@ -184,14 +178,9 @@ namespace Xperience.Core.Breadcrumbs
             }
 
             // Add link to main domain if needed
-            if (addSiteLink)
+            if (props.ShowSiteLink)
             {
-                ret.Add(new BreadcrumbItem
-                {
-                    IsSiteLink = true,
-                    Name = current.Site.DisplayName,
-                    Url = current.Site.SitePresentationURL
-                });
+                ret.Add(breadcrumbItemMapper.MapSite(current.Site));
                 cacheDependencies.Add($"cms.site|byid|{current.Site.SiteID}");
             }
 

@@ -22,7 +22,7 @@ namespace Xperience.Core.Breadcrumbs
 
             // Register widget properties
             var props = new BreadcrumbsWidgetProperties();
-            if (configure is object)
+            if (configure != null)
             {
                 configure(props);
             }

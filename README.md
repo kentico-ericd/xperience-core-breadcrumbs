@@ -67,9 +67,11 @@ To override the properties registered during application startup, pass a new `Br
 })
 ```
 
-## Custom rendering
+## Customizations
 
-The final HTML of your breadcrumbs is determined by the `IBreadcrumbsRenderer` interface, which you can find the default code for in [DefaultBreadcrumbsRenderer](/Renderer/DefaultBreadcrumbsRenderer.cs). If you'd like to customize the HTML of the breadcrumbs, you can implement your own `IBreadcrumbsRenderer` and use the `RegisterImplementation` attribute to register your code with a higher priority:
+### Breadcrumb rendering
+
+The final HTML of your breadcrumbs is determined by the `IBreadcrumbsRenderer` interface, which you can find the default code for in [DefaultBreadcrumbsRenderer](/src/Xperience.Core.Breadcrumbs/Services/DefaultBreadcrumbsRenderer.cs). If you'd like to customize the HTML of the breadcrumbs, you can implement your own `IBreadcrumbsRenderer` and use the `RegisterImplementation` attribute to register your code with a higher priority:
 
 ```cs
 [assembly: RegisterImplementation(typeof(IBreadcrumbsRenderer), typeof(CustomBreadcrumbsRenderer), Lifestyle = Lifestyle.Singleton, Priority = RegistrationPriority.Default)]
@@ -78,6 +80,20 @@ namespace MySite.Breadcrumbs {
     /// Custom implementation of <see cref="IBreadcrumbsRenderer"/>.
     /// </summary>
     public class CustomBreadcrumbsRenderer : IBreadcrumbsRenderer {
+```
+
+### Breadcrumb item generation
+
+Breadcrumb items are provided by the [DefaultBreadcrumbItemMapper](/src/Xperience.Core.Breadcrumbs/Services/DefaultBreadcrumbItemMapper.cs). If you would like to modify how the breadcrumb names, URLs, etc. are generated, you can implement your own `IBreadcrumbItemMapper` and use the `RegisterImplementation` attribute to register your code with a higher priority:
+
+```cs
+[assembly: RegisterImplementation(typeof(IBreadcrumbItemMapper), typeof(CustomBreadcrumbItemMapper), Lifestyle = Lifestyle.Singleton, Priority = RegistrationPriority.Default)]
+namespace MySite.Breadcrumbs
+{
+    /// <summary>
+    /// Custom implementation of <see cref="IBreadcrumbItemMapper"/>.
+    /// </summary>
+    public class CustomBreadcrumbItemMapper : IBreadcrumbItemMapper {
 ```
 
 ## Compatibility
