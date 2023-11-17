@@ -9,7 +9,7 @@ namespace Xperience.Core.Breadcrumbs
     /// <summary>
     /// Default implementation of <see cref="IBreadcrumbsRenderer"/>.
     /// </summary>
-    internal class DefaultBreadcrumbsRenderer : IBreadcrumbsRenderer
+    public class DefaultBreadcrumbsRenderer : IBreadcrumbsRenderer
     {
         public string RenderClosingTag()
         {

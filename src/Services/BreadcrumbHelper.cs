@@ -162,15 +162,11 @@ namespace Xperience.Core.Breadcrumbs
             var nodeLevel = current.NodeLevel - 1;
             while (nodeLevel > 0)
             {
-                var parent = pages.Where(p => p.NodeLevel == nodeLevel).FirstOrDefault();
+                var parent = pages.FirstOrDefault(p => p.NodeLevel == nodeLevel);
                 var type = DataClassInfoProvider.GetDataClassInfo(parent.ClassName);
-                if (type != null)
+                if (type != null && (type.ClassHasURL || (!type.ClassIsCoupledClass && props.ShowContainers)))
                 {
-                    if (type.ClassHasURL ||
-                        (!type.ClassIsCoupledClass && props.ShowContainers))
-                    {
-                        ret.Add(breadcrumbItemMapper.MapPage(parent));
-                    }
+                    ret.Add(breadcrumbItemMapper.MapPage(parent));
                 }
                 cacheDependencies.Add($"documentid|{current.DocumentID}");
 

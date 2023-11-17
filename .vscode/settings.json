@@ -29,11 +29,10 @@
     "editor.semanticHighlighting.enabled": true,
     "editor.defaultFormatter": "ms-dotnettools.csharp"
   },
-
-  "omnisharp.defaultLaunchSolution": "./XperienceCoreBreadcrumbs.sln",
   "omnisharp.organizeImportsOnFormat": true,
   "omnisharp.useEditorFormattingSettings": true,
   "omnisharp.enableEditorConfigSupport": true,
-  "omnisharp.enableImportCompletion": true,
-  "omnisharp.useModernNet": true
+  "omnisharp.useModernNet": true,
+  "dotnet.defaultSolution": "./XperienceCoreBreadcrumbs.sln",
+  "dotnet.completion.showCompletionItemsFromUnimportedNamespaces": true
 }

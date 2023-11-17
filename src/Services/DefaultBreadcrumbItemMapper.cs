@@ -15,7 +15,7 @@ namespace Xperience.Core.Breadcrumbs
     /// <summary>
     /// Default implementation of <see cref="IBreadcrumbItemMapper"/>.
     /// </summary>
-    internal class DefaultBreadcrumbItemMapper : IBreadcrumbItemMapper
+    public class DefaultBreadcrumbItemMapper : IBreadcrumbItemMapper
     {
         private readonly IPageUrlRetriever pageUrlRetriever;
 
