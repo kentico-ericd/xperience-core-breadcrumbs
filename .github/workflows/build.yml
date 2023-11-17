@@ -17,11 +17,14 @@ jobs:
       uses: actions/setup-dotnet@v3
       with:
         dotnet-version: 6.0.x
-    - name: Restore dependencies
+    - name: Restore src dependencies
       run: dotnet restore
       working-directory: src
-    - name: Build
+    - name: Restore test dependencies
+      run: dotnet restore
+      working-directory: test
+    - name: Build src
       run: dotnet build --no-restore
     - name: Test
-      run: dotnet test --no-build --verbosity normal
+      run: dotnet test --no-restore --verbosity normal
       working-directory: test
