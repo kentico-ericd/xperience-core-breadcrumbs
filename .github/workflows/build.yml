@@ -22,9 +22,10 @@ jobs:
       working-directory: src
     - name: Restore test dependencies
       run: dotnet restore
-      working-directory: test
+      working-directory: tests
     - name: Build src
       run: dotnet build --no-restore
+      working-directory: src
     - name: Test
       run: dotnet test --no-restore --verbosity normal
-      working-directory: test
+      working-directory: tests
