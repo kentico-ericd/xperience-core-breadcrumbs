@@ -1,4 +1,5 @@
 [![Nuget](https://img.shields.io/nuget/v/Xperience.Core.Breadcrumbs)](https://www.nuget.org/packages/Xperience.Core.Breadcrumbs)
+![build](https://github.com/kentico-ericd/xperience-core-breadcrumbs/actions/workflows/build.yml/badge.svg)
 
 # Xperience 13 .NET Core Breadcrumb Widget
 
